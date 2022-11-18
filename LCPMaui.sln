@@ -4,7 +4,7 @@ VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LCPMaui", "LCPMaui.csproj", "{A24D7363-21C2-49F6-A0CD-7BC802CF5424}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LCPWebApi", "..\LCPWebApi\LCPWebApi.csproj", "{1287106B-432E-4CB6-9C13-7538774FDD6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LCPMauiWebApi", "..\LCPMauiWebApi\LCPMauiWebApi.csproj", "{655B9512-7430-4AF8-9C19-7BFA81F94E5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,20 +26,20 @@ Global
 		{A24D7363-21C2-49F6-A0CD-7BC802CF5424}.Release|x64.ActiveCfg = Release|Any CPU
 		{A24D7363-21C2-49F6-A0CD-7BC802CF5424}.Release|x64.Build.0 = Release|Any CPU
 		{A24D7363-21C2-49F6-A0CD-7BC802CF5424}.Release|x64.Deploy.0 = Release|Any CPU
-		{1287106B-432E-4CB6-9C13-7538774FDD6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1287106B-432E-4CB6-9C13-7538774FDD6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1287106B-432E-4CB6-9C13-7538774FDD6D}.Debug|x64.ActiveCfg = Debug|x64
-		{1287106B-432E-4CB6-9C13-7538774FDD6D}.Debug|x64.Build.0 = Debug|x64
-		{1287106B-432E-4CB6-9C13-7538774FDD6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1287106B-432E-4CB6-9C13-7538774FDD6D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1287106B-432E-4CB6-9C13-7538774FDD6D}.Release|x64.ActiveCfg = Release|x64
-		{1287106B-432E-4CB6-9C13-7538774FDD6D}.Release|x64.Build.0 = Release|x64
+		{655B9512-7430-4AF8-9C19-7BFA81F94E5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{655B9512-7430-4AF8-9C19-7BFA81F94E5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{655B9512-7430-4AF8-9C19-7BFA81F94E5C}.Debug|x64.ActiveCfg = Debug|x64
+		{655B9512-7430-4AF8-9C19-7BFA81F94E5C}.Debug|x64.Build.0 = Debug|x64
+		{655B9512-7430-4AF8-9C19-7BFA81F94E5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{655B9512-7430-4AF8-9C19-7BFA81F94E5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{655B9512-7430-4AF8-9C19-7BFA81F94E5C}.Release|x64.ActiveCfg = Release|x64
+		{655B9512-7430-4AF8-9C19-7BFA81F94E5C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		        SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}
 		SolutionGuid = {87F84E3F-434F-4FBE-B1AD-5856F442939A}
+		        SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}
 	EndGlobalSection
 EndGlobal
