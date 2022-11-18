@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using LCPMaui.Data;
+using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http;
+using LCPMaui.Services;
 
 namespace LCPMaui;
 
@@ -22,7 +24,7 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 
-		builder.Services.AddSingleton<WeatherForecastService>();
+        builder.Services.AddHttpClient<IMyServices, MyServices>();
 
 		return builder.Build();
 	}

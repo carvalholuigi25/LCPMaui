@@ -1,8 +1,15 @@
 ﻿@using System.Net.Http
+@using System.Text.Json
+@using System.Text.Json.Serialization
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.JSInterop
 @using LCPMaui
+@using LCPMaui.Classes
+@using LCPMaui.Components
+@using LCPMaui.Services
 @using LCPMaui.Shared
+@inject IHttpClientFactory ClientFactory
+@inject HttpClient hc

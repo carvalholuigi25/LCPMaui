@@ -1,0 +1,54 @@
+﻿<div class="container">
+    @if (posts != null)
+    {
+        <div class="row">
+            @foreach(var ps in posts)
+            {
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card">
+                        <img src="@ps.Image" alt="@ps.Title" title="@ps.Title" loading="lazy" class="card-img-top img-fluid img-post" />
+                        <div class="card-body">
+                            <p class="card-title">@ps.Title</p>
+                            <p class="card-text">@ps.Desc</p>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="clearfix"></div>
+        </div>
+    }
+    else
+    {
+        if(isLoading)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <h3>Loading posts...</h3>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-12">
+                    <h3>Unable to fetch posts...</h3>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    [Inject] public IMyServices MyServices { get; set; }
+    
+    private List<Classes.Posts> posts = new List<Classes.Posts>();
+    private bool isLoading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        posts = (await MyServices.Get<Classes.Posts>("posts")).ToList();
+        isLoading = false;
+    }
+}
