@@ -1,4 +1,6 @@
-﻿<div class="container">
+﻿@inject IJSRuntime js
+
+<div class="container">
     @if (posts != null)
     {
         <div class="row">
@@ -41,14 +43,23 @@
 
 @code {
     [Inject] public IMyServices MyServices { get; set; }
-    
+
     private List<Classes.Posts> posts = new List<Classes.Posts>();
     private bool isLoading;
 
     protected override async Task OnInitializedAsync()
     {
-        isLoading = true;
-        posts = (await MyServices.Get<Classes.Posts>("posts")).ToList();
-        isLoading = false;
+        try
+        {
+            isLoading = true;
+            posts = (await MyServices.Get<Classes.Posts>("posts")).ToList();
+            isLoading = false;
+        } 
+        catch (Exception ex)
+        {
+            posts = null;
+            await js.InvokeVoidAsync("console.log", "" + ex.Message);
+            isLoading = false;    
+        }
     }
 }

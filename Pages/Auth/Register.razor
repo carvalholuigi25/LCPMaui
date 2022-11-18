@@ -12,17 +12,17 @@
 
     <div class="form-group mt-3">
         <label for="username" class="usernamelbl d-block">Username:</label>
-        <InputText type="text" class="form-control mt-3" Value="@users.Username" />
+        <InputText type="text" class="form-control mt-3" @bind-Value="users.Username" />
     </div>
 
     <div class="form-group mt-3">
         <label for="email" class="emaillbl d-block">Email:</label>
-        <InputText type="email" class="form-control mt-3" Value="@users.Email" />
+        <InputText type="email" class="form-control mt-3" @bind-Value="users.Email" />
     </div>
 
     <div class="form-group mt-3">
         <label for="password" class="passwordlbl d-block">Password:</label>
-        <InputText type="password" class="form-control mt-3" Value="@users.Password" />
+        <InputText type="password" class="form-control mt-3" @bind-Value="users.Password" />
     </div>
 
     <div class="form-group mt-3 d-inline-block">
