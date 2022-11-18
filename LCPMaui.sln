@@ -3,9 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LCPMaui", "LCPMaui.csproj", "{A24D7363-21C2-49F6-A0CD-7BC802CF5424}"
-	ProjectSection(ProjectDependencies) = postProject
-		{1287106B-432E-4CB6-9C13-7538774FDD6D} = {1287106B-432E-4CB6-9C13-7538774FDD6D}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LCPWebApi", "..\LCPWebApi\LCPWebApi.csproj", "{1287106B-432E-4CB6-9C13-7538774FDD6D}"
 EndProject
