@@ -1,9 +1,47 @@
-﻿@page "/login"
+﻿@inject IJSRuntime js
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject NavigationManager _navman
+@page "/login"
 
 <PageTitle>LCP Maui - Login</PageTitle>
 
 <h3>Login</h3>
 
-@code {
+<EditForm Model="@usersath" OnValidSubmit="onValidSubmit" OnInvalidSubmit="onInvalidSubmit">
+    <ValidationSummary />
+    <DataAnnotationsValidator />
 
+    <div class="form-group mt-3">
+        <label for="username" class="usernamelbl d-block">Username:</label>
+        <InputText type="text" class="form-control mt-3" Value="@usersath.Username" />
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="password" class="passwordlbl d-block">Password:</label>
+        <InputText type="password" class="form-control mt-3" Value="@usersath.Password" />
+    </div>
+
+    <div class="form-group mt-3 d-inline-block">
+        <input type="reset" class="btn btn-secondary btnclear" value="Clear" />
+        <input type="submit" class="btn btn-primary btnsubmit" value="Enter" />
+    </div>
+</EditForm>
+
+@code {
+    [Inject] public IMyServices MyServices { get; set; }
+
+    private Classes.UsersAuth usersath = new Classes.UsersAuth();
+
+    private async Task onValidSubmit()
+    {
+        await js.InvokeVoidAsync("alert", "Valid data!");
+        await MyServices.Create<Classes.UsersAuth>("login", usersath);
+        await localStorage.SetItemAsync<Classes.UsersAuth>("usersession", usersath);
+        _navman.NavigateTo("/", true);
+    }
+
+    private async Task onInvalidSubmit()
+    {
+        await js.InvokeVoidAsync("alert", "Invalid data!");
+    }
 }

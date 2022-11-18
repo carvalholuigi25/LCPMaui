@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
 using LCPMaui.Services;
+using Blazored.LocalStorage;
 
 namespace LCPMaui;
 
@@ -18,9 +19,10 @@ public static class MauiProgram
 			});
 
 		builder.Services.AddMauiBlazorWebView();
+        builder.Services.AddBlazoredLocalStorage();
 
 #if DEBUG
-		builder.Services.AddBlazorWebViewDeveloperTools();
+        builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
 #endif
 
