@@ -6,10 +6,14 @@
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.JSInterop
+@using Newtonsoft.Json
 @using LCPMaui
 @using LCPMaui.Classes
 @using LCPMaui.Components
 @using LCPMaui.Services
 @using LCPMaui.Shared
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject IHttpClientFactory ClientFactory
+@inject IJSRuntime js
 @inject HttpClient hc
+@inject NavigationManager _navman

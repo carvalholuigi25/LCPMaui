@@ -1,19 +1,63 @@
-﻿@inject IJSRuntime js
+﻿@page "/posts"
+@page "/posts/{Id:int}"
 
 <div class="container">
     @if (posts != null)
     {
         <div class="row">
-            @foreach(var ps in posts)
+            @if(posts.Count() > 0)
             {
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card">
-                        <img src="@ps.Image" alt="@ps.Title" title="@ps.Title" loading="lazy" class="card-img-top img-fluid img-post" />
-                        <div class="card-body">
-                            <p class="card-title">@ps.Title</p>
-                            <p class="card-text">@ps.Desc</p>
+                @if(Id > 0)
+                {
+                    @foreach (var ps in posts)
+                    {
+                        @if(Id == ps.UsersId)
+                        {
+                            <div class="col-12">
+                                <div class="card">
+                                    <img src="@ps.Image" alt="@ps.Title" title="@ps.Title" loading="lazy" class="card-img-top img-fluid img-post" />
+                                    <div class="card-body">
+                                        <p class="card-title">@ps.Title</p>
+                                        <p class="card-text mt-3">Category: @ps.Category || Users Id: @ps.UsersId</p>
+                                        <p class="card-text mt-3">Date: @ps.DateCreated || Privacy: @ps.Privacy</p>
+                                        <p class="card-text mt-3">@ps.Text</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    <a href="/posts" class="btn btn-primary mt-3">Back to posts</a>
+                } 
+                else
+                {
+                    @foreach (var ps in posts)
+                    {
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="card">
+                                <a href="posts/@ps.PostsId">
+                                    <img src="@ps.Image" alt="@ps.Title" title="@ps.Title" loading="lazy" class="card-img-top img-fluid img-post" />
+                                    <div class="card-body">
+                                        <p class="card-title">@ps.Title</p>
+                                        <p class="card-text">@ps.Desc</p>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    }
+
+                    <a href="/" class="btn btn-primary mt-3">Back</a>
+                }
+            }
+            else
+            {
+                <div class="col-12">
+                    <h3>0 posts data...</h3>
+
+                    @if (_navman.Uri != "/")
+                    {
+                        <a href="/" class="btn btn-primary mt-3">Back</a>
+                    }
                 </div>
             }
 
@@ -22,11 +66,11 @@
     }
     else
     {
-        if(isLoading)
+        @if(isLoading)
         {
             <div class="row">
                 <div class="col-12">
-                    <h3>Loading posts...</h3>
+                    <h3>Loading posts data...</h3>
                 </div>
             </div>
         }
@@ -34,7 +78,8 @@
         {
             <div class="row">
                 <div class="col-12">
-                    <h3>Unable to fetch posts...</h3>
+                    <h3>Unable to fetch posts data...</h3>
+                    <a href="/" class="btn btn-primary mt-3">Back</a>
                 </div>
             </div>
         }
@@ -43,6 +88,7 @@
 
 @code {
     [Inject] public IMyServices MyServices { get; set; }
+    [Parameter] public int? Id { get; set; }
 
     private List<Classes.Posts> posts = new List<Classes.Posts>();
     private bool isLoading;

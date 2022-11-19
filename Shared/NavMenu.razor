@@ -14,38 +14,64 @@
                 Home
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/login" Match="NavLinkMatch.All">
-                Login
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/logout" Match="NavLinkMatch.All">
-                Logout
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/register" Match="NavLinkMatch.All">
-                Register
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/users" Match="NavLinkMatch.All">
-                Users
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/admin" Match="NavLinkMatch.All">
-                Admin Dashboard
-            </NavLink>
-        </div>
+
+        @if(mysession != null)
+        {
+            if (mysession.Role == "admin" || mysession.Role == "superadmin")
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="/admin" Match="NavLinkMatch.All">
+                        Admin Dashboard
+                    </NavLink>
+                </div>
+            }
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/users" Match="NavLinkMatch.All">
+                    Users
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="@($"/users/{mysession.UsersAuthId}")" Match="NavLinkMatch.All">
+                    @mysession.Username
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/logout" Match="NavLinkMatch.All">
+                    Logout
+                </NavLink>
+            </div>
+        }
+        else
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/login" Match="NavLinkMatch.All">
+                    Login
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/register" Match="NavLinkMatch.All">
+                    Register
+                </NavLink>
+            </div>
+        }
     </nav>
 </div>
 
 @code {
+    private Classes.UsersAuth mysession = new Classes.UsersAuth();
+    
     private bool collapseNavMenu = true;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        mysession = await localStorage.GetItemAsync<Classes.UsersAuth>("usersession");
+    }
 
     private void ToggleNavMenu()
     {

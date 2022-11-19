@@ -1,8 +1,4 @@
-﻿@inject IJSRuntime js
-@inject NavigationManager _navman
-@inject Blazored.LocalStorage.ILocalStorageService localStorage
-
-@page "/logout"
+﻿@page "/logout"
 
 <PageTitle>LCP Maui - Logout</PageTitle>
 
@@ -28,6 +24,7 @@
             <div class="col-12 text-center">
                 <i class="bi bi-exclamation-triangle-fill" style="font-size: 4rem; color: red;"></i>
                 <h1 class="mt-3">401 Unauthorized!</h1>
+                <a href="/" class="btn btn-primary mt-3">Back</a>
             </div>
         </div>
     }

@@ -1,9 +1,106 @@
 ﻿@page "/users"
+@page "/users/{Id:int}"
 
 <PageTitle>LCP Maui - Users</PageTitle>
 
 <h3>Users</h3>
 
-@code {
+<div class="container">
+    @if (users != null)
+    {
+        <div class="row">
+            @if (users.Count() > 0)
+            {
+                @if(Id > 0)
+                {
+                    @foreach (var user in users)
+                    {
+                        @if(Id == user.UsersId)
+                        {
+                            <div class="col-12">
+                                <div class="card">
+                                    <img src="images/@user.Image" alt="@user.Username" title="@user.Username" loading="lazy" class="card-img-top img-fluid img-post" />
+                                    <div class="card-body">
+                                        <p class="card-title">@user.Username</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
 
+                    <a href="/users" class="btn btn-primary mt-3">Back to users</a>
+                }
+                else
+                {
+                    @foreach (var user in users)
+                    {
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <div class="card">
+                                <a href="users/@user.UsersId">
+                                    <img src="images/@user.Image" alt="@user.Username" title="@user.Username" loading="lazy" class="card-img-top img-fluid img-post" />
+                                    <div class="card-body">
+                                        <p class="card-title">@user.Username</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    }
+
+                    <a href="/" class="btn btn-primary mt-3">Back</a>
+                }
+            }
+            else
+            {
+                <div class="col-12">
+                    <h3>0 users data...</h3>
+                    <a href="/" class="btn btn-primary mt-3">Back</a>
+                </div>
+            }
+
+            <div class="clearfix"></div>
+        </div>
+    }
+    else
+    {
+        @if (isLoading)
+        {
+            <div class="row">
+                <div class="col-12">
+                    <h3>Loading users data...</h3>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-12">
+                    <h3>Unable to fetch users data...</h3>
+                    <a href="/" class="btn btn-primary mt-3">Back</a>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    [Inject] public IMyServices MyServices { get; set; }
+    [Parameter] public int? Id { get; set; }
+    private List<Classes.Users> users = new List<Classes.Users>();
+    private bool isLoading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            isLoading = true;
+            users = (await MyServices.Get<Classes.Users>("users")).ToList();
+            isLoading = false;
+        }
+        catch (Exception ex)
+        {
+            users = null;
+            await js.InvokeVoidAsync("console.log", "" + ex.Message);
+            isLoading = false;
+        }
+    }
 }

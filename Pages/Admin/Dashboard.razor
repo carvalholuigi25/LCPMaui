@@ -2,8 +2,36 @@
 
 <PageTitle>LCP Maui - Admin Dashboard</PageTitle>
 
-<h3>Admin Dashboard</h3>
+<h3>Admin Dashboard</h3
+
+@if(mysession != null && (mysession.Role == "admin" || mysession.Role == "superadmin"))
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <p>Welcome to admin dashboard page!</p>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-12 text-center">
+                <i class="bi bi-exclamation-triangle-fill" style="font-size: 4rem; color: red;"></i>
+                <h1 class="mt-3">401 Unauthorized!</h1>
+                <a href="/" class="btn btn-primary mt-3">Back</a>
+            </div>
+        </div>
+    </div>
+}
 
 @code {
+    private Classes.UsersAuth mysession = new Classes.UsersAuth();
 
+    protected override async Task OnInitializedAsync()
+    {
+        mysession = await localStorage.GetItemAsync<Classes.UsersAuth>("usersession");
+    }
 }
