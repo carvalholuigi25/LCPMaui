@@ -23,7 +23,7 @@ namespace LCPMaui.Classes
         public string? Password { get; set; }
 
         [DisplayName("Pin")]
-        public int? Pin { get; set; }
+        public string? Pin { get; set; }
 
         [DisplayName("Role")]
         public string? Role { get; set; }
