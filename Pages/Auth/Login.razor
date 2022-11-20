@@ -60,6 +60,7 @@ else
         usersath.UsersAuthId = (await getList()).UsersId;
         usersath.Role = string.IsNullOrEmpty(usersath.Role) ? (await getList()).Role : usersath.Role;
         usersath.Email = string.IsNullOrEmpty(usersath.Email) ? (await getList()).Email : usersath.Email;
+        usersath.Pin = string.IsNullOrEmpty(usersath.Pin) ? (await getList()).Pin : usersath.Pin;
         await js.InvokeVoidAsync("alert", "Valid data! " + JsonConvert.SerializeObject(usersath));
         await MyServices.Create<Classes.UsersAuth>("users/login", usersath);
         await localStorage.SetItemAsync<Classes.UsersAuth>("usersession", usersath);
