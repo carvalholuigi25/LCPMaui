@@ -8,7 +8,7 @@
         <div class="col-12">
             <h3>Feedback</h3>
             
-            <EditForm Model="@feedback" OnValidSubmit="onValidSubmit" OnInvalidSubmit="onInvalidSubmit">
+            <EditForm Model="feedback" OnValidSubmit="onValidSubmit" OnInvalidSubmit="onInvalidSubmit">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
 
@@ -23,34 +23,75 @@
                 </div>
 
                 <div class="form-group mt-3 d-inline-block">
-                    <div class="senderblk d-inline-block">
-                        <span>Sending as</span>
-                        <input type="text" class="form-control" value="@mysession.Username" style="cursor: not-allowed; background: gray; color: white;" disabled />
-                        <InputNumber id="usersId" class="usersId hidden form-control" @bind-Value="mysession.UsersAuthId" />
+                    @if (mysession != null)
+                    {
+                        <div class="senderblk d-inline-block">
+                            <label>Sending as</label>
+                        
+                            <input type="text" class="form-control" value="@mysession.Username" style="cursor: not-allowed; background: gray; color: white;" readonly />
+                            <InputNumber id="usersId" class="usersId hidden form-control" @bind-Value="mysession.UsersAuthId" />
+                        </div>
+                    }
+
+                    <div class="statusblk d-inline-block @(mysession != null ? "ms-3" : "")">
+                        <label>Status</label>
+                        <InputSelect class="status form-control d-inline-block" id="status" @bind-Value="feedback.Status">
+                            @foreach (var status in Enum.GetValues(typeof(StatusType)))
+                            {
+                                <option value="@status">@status</option>
+                            }
+                        </InputSelect>
                     </div>
-                    <button type="reset" class="btn btn-secondary btnclear">Clear</button>
+                    
+                    <button type="button" class="btn btn-secondary btnclear" onclick="@(() => Clear())">Clear</button>
                     <button type="submit" class="btn btn-primary btnsend">Send</button>
                 </div>
             </EditForm>
 
             @if(feedbacklist != null)
             {
-                @foreach(var fbl in feedbacklist)
+                @if(Id > 0)
                 {
-                    <div class="feedbacklist d-block mt-3 col-12">
-                        <div class="col-6">
-                            <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote())"></i>
-                            <span class="counter @(fbl.Upvotes > 0 ? "upvoted" : (fbl.Downvotes > 0 ? "downvoted" : ""))">
-                                @(fbl.Upvotes > 0 ? fbl.Upvotes : fbl.Downvotes)
-                            </span>
-                            <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote())"></i>
+                    @foreach (var fbl in feedbacklist)
+                    {
+                        if(Id == fbl.UsersId)
+                        {
+                            <div class="feedbacklist d-block mt-3 col-12">
+                                <div class="col-6">
+                                    <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote())"></i>
+                                    <span class="counter @(fbl.Upvotes > 0 ? "upvoted" : (fbl.Downvotes > 0 ? "downvoted" : ""))">
+                                        @(fbl.Upvotes > 0 ? fbl.Upvotes : fbl.Downvotes)
+                                    </span>
+                                    <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote())"></i>
+                                </div>
+                                <div class="col-6">
+                                    <h1 class="title">@fbl.Title</h1>
+                                    <p class="barinfo mt-3">UserId: @fbl.UsersId | Date Start: @fbl.DateStart | Date End: @fbl.DateEnd</p>
+                                    <p class="text text-justify mt-3">@fbl.Description</p>
+                                </div>
+                            </div>
+                        }
+                    }
+                } 
+                else
+                {
+                    @foreach (var fbl in feedbacklist)
+                    {
+                        <div class="feedbacklist d-block mt-3 col-12">
+                            <div class="col-6">
+                                <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote())"></i>
+                                <span class="counter @(fbl.Upvotes > 0 ? "upvoted" : (fbl.Downvotes > 0 ? "downvoted" : ""))">
+                                    @(fbl.Upvotes > 0 ? fbl.Upvotes : fbl.Downvotes)
+                                </span>
+                                <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote())"></i>
+                            </div>
+                            <div class="col-6">
+                                <h1 class="title">@fbl.Title</h1>
+                                <p class="barinfo mt-3">UserId: @fbl.UsersId | Date Start: @fbl.DateStart | Date End: @fbl.DateEnd</p>
+                                <p class="text text-justify mt-3">@fbl.Description</p>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <h1 class="title">@fbl.Title</h1>
-                            <p class="barinfo mt-3">UserId: @fbl.UsersId | Date Start: @fbl.DateStart | Date End: @fbl.DateEnd</p>
-                            <p class="text text-justify mt-3">@fbl.Description</p>
-                        </div>
-                    </div>
+                    }
                 }
             }
             else
@@ -90,13 +131,7 @@
         {
             isLoading = true;
             mysession = await localStorage.GetItemAsync<Classes.UsersAuth>("usersession");
-            feedbacklist = (await MyServices.Get<Classes.Feedback>("feedback")).ToList();
-
-            if(Id > 0)
-            {
-                feedbacklist = feedbacklist.Where(x => x.FeedbackId == Id).ToList();
-            }
-
+            feedbacklist = (await MyServices.Get<Classes.Feedback>("feedbacks")).ToList();
             isLoading = false;
         }
         catch (Exception ex)
@@ -109,7 +144,7 @@
 
     private async Task onValidSubmit()
     {
-        await MyServices.Create<Classes.Feedback>("feedback", feedback);
+        await MyServices.Create<Classes.Feedback>("feedbacks", feedback);
         await js.InvokeVoidAsync("alert", "Thank you for sending your feedback to me!");
 
         if(Id > 0)
@@ -132,14 +167,15 @@
         if(Id > 0)
         {
             upvoteCounter++;
+            downvoteCounter = 0;
             feedback.Upvotes = upvoteCounter;
-            feedback.Downvotes = 0;
-            await MyServices.UpdateById("feedback", Id, feedback);
+            feedback.Downvotes = downvoteCounter;
+            await MyServices.UpdateById("feedbacks", Id, feedback);
             await js.InvokeVoidAsync("alert", $"You upvoted this feedback post (Id: {Id})!");
         }
         else
         {
-            await js.InvokeVoidAsync("alert", $"Cannot upvote this feedback post because it doesnt exist!");
+            await js.InvokeVoidAsync("alert", "Cannot upvote this feedback post because it doesnt exist!");
         }
     }
 
@@ -148,14 +184,21 @@
         if(Id > 0)
         {
             downvoteCounter++;
+            upvoteCounter = 0;
             feedback.Downvotes = downvoteCounter;
-            feedback.Upvotes = 0;
-            await MyServices.UpdateById("feedback", Id, feedback);
+            feedback.Upvotes = upvoteCounter;
+            await MyServices.UpdateById("feedbacks", Id, feedback);
             await js.InvokeVoidAsync("alert", $"You downvoted this feedback post (Id: {Id})!");
         } 
         else
         {
-            await js.InvokeVoidAsync("alert", $"Cannot downvote this feedback post because it doesnt exist!");
+            await js.InvokeVoidAsync("alert", "Cannot downvote this feedback post because it doesnt exist!");
         }
+    }
+
+    private async Task Clear()
+    {
+        feedback = new Classes.Feedback();
+        await js.InvokeVoidAsync("alert", "Cleared!");
     }
 }
