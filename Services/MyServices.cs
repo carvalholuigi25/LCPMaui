@@ -7,7 +7,7 @@ namespace LCPMaui.Services
         public Task<List<T>> Get<T>(string apiname);
         public Task<T> GetById<T>(string apiname, int id);
         public Task<T> Create<T>(string apiname, T item);
-        public Task<T> UpdateById<T>(string apiname, int id, T item);
+        public Task<T> UpdateById<T>(string apiname, int? id, T item);
         public Task DeleteById<T>(string apiname, int id);
     }
 
@@ -37,7 +37,7 @@ namespace LCPMaui.Services
             return await response.Content.ReadFromJsonAsync<T>();
         }
 
-        public async Task<T> UpdateById<T>(string apiname, int id, T item)
+        public async Task<T> UpdateById<T>(string apiname, int? id, T item)
         {
             var resp = await httpClient.PutAsJsonAsync<T>($"{apiUrl}/{apiname}/{id}", item);
             return await resp.Content.ReadFromJsonAsync<T>();

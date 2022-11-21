@@ -25,22 +25,22 @@ namespace LCPMaui.Classes
         public string? AttachmentFile { get; set; }
 
         [DisplayName("Upvotes")]
-        public int? Upvotes { get; set; }
+        public int? Upvotes { get; set; } = 0;
 
         [DisplayName("Downvotes")]
-        public int? Downvotes { get; set; }
+        public int? Downvotes { get; set; } = 0;
 
         [DisplayName("Status")]
-        public StatusType? Status { get; set; }
+        public string? Status { get; set; } = StatusType.resolved.ToString();
 
         [DisplayName("DateStart")]
-        public DateTime? DateStart { get; set; }
+        public DateTime? DateStart { get; set; } = DateTime.UtcNow;
 
         [DisplayName("DateEnd")]
-        public DateTime? DateEnd { get; set; }
+        public DateTime? DateEnd { get; set; } = DateTime.UtcNow.AddDays(7);
 
         [DisplayName("UsersId")]
-        public int? UsersId { get; set; }
+        public int? UsersId { get; set; } = 1;
     }
 
     public enum StatusType

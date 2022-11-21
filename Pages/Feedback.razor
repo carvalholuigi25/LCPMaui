@@ -36,9 +36,11 @@
                     <div class="statusblk d-inline-block @(mysession != null ? "ms-3" : "")">
                         <label>Status</label>
                         <InputSelect class="status form-control d-inline-block" id="status" @bind-Value="feedback.Status">
-                            @foreach (var status in Enum.GetValues(typeof(StatusType)))
+                            @foreach (int status in Enum.GetValues(typeof(StatusType)))
                             {
-                                <option value="@status">@status</option>
+                                <option value="@Enum.GetName(typeof(StatusType), status)" data-id="@status">
+                                    @Enum.GetName(typeof(StatusType), status)
+                                </option>
                             }
                         </InputSelect>
                     </div>
@@ -58,11 +60,11 @@
                         {
                             <div class="feedbacklist d-block mt-3 col-12">
                                 <div class="col-6">
-                                    <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote())"></i>
+                                    <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote(fbl.FeedbackId))"></i>
                                     <span class="counter @(fbl.Upvotes > 0 ? "upvoted" : (fbl.Downvotes > 0 ? "downvoted" : ""))">
                                         @(fbl.Upvotes > 0 ? fbl.Upvotes : fbl.Downvotes)
                                     </span>
-                                    <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote())"></i>
+                                    <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote(fbl.FeedbackId))"></i>
                                 </div>
                                 <div class="col-6">
                                     <h1 class="title">@fbl.Title</h1>
@@ -79,11 +81,11 @@
                     {
                         <div class="feedbacklist d-block mt-3 col-12">
                             <div class="col-6">
-                                <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote())"></i>
+                                <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote(fbl.FeedbackId))"></i>
                                 <span class="counter @(fbl.Upvotes > 0 ? "upvoted" : (fbl.Downvotes > 0 ? "downvoted" : ""))">
                                     @(fbl.Upvotes > 0 ? fbl.Upvotes : fbl.Downvotes)
                                 </span>
-                                <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote())"></i>
+                                <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote(fbl.FeedbackId))"></i>
                             </div>
                             <div class="col-6">
                                 <h1 class="title">@fbl.Title</h1>
@@ -98,13 +100,13 @@
             {
                 if (isLoading)
                 {
-                    <div class="col-12">
+                    <div class="col-12 mt-3">
                         <h3>Loading feedback messages...</h3>
                     </div>
                 }
                 else
                 {
-                    <div class="col-12">
+                    <div class="col-12 mt-3">
                         <h3>0 feedback messages!</h3>
                     </div>
                 }
@@ -115,7 +117,7 @@
 
 @code {
     [Inject] public IMyServices MyServices { get; set; }
-    [Parameter] public int Id { get; set; }
+    [Parameter] public int? Id { get; set; }
 
     private Classes.UsersAuth mysession = new Classes.UsersAuth();
     public Classes.Feedback feedback = new Classes.Feedback();
@@ -162,16 +164,16 @@
         await js.InvokeVoidAsync("alert", "Error: Data is not valid to submit!");
     }
 
-    private async Task onUpvote()
+    private async Task onUpvote(int? myfbid = 1)
     {
-        if(Id > 0)
+        if (myfbid > 0)
         {
             upvoteCounter++;
             downvoteCounter = 0;
             feedback.Upvotes = upvoteCounter;
             feedback.Downvotes = downvoteCounter;
-            await MyServices.UpdateById("feedbacks", Id, feedback);
-            await js.InvokeVoidAsync("alert", $"You upvoted this feedback post (Id: {Id})!");
+            await MyServices.UpdateById("feedbacks", myfbid, feedback);
+            await js.InvokeVoidAsync("alert", $"You upvoted this feedback post (Id: {myfbid})!");
         }
         else
         {
@@ -179,16 +181,16 @@
         }
     }
 
-    private async Task onDownvote()
+    private async Task onDownvote(int? myfbid = 1)
     {
-        if(Id > 0)
+        if(myfbid > 0)
         {
             downvoteCounter++;
             upvoteCounter = 0;
             feedback.Downvotes = downvoteCounter;
             feedback.Upvotes = upvoteCounter;
-            await MyServices.UpdateById("feedbacks", Id, feedback);
-            await js.InvokeVoidAsync("alert", $"You downvoted this feedback post (Id: {Id})!");
+            await MyServices.UpdateById("feedbacks", myfbid, feedback);
+            await js.InvokeVoidAsync("alert", $"You downvoted this feedback post (Id: {myfbid})!");
         } 
         else
         {
