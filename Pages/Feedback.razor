@@ -65,7 +65,7 @@
                                 <div class="col-6">
                                     <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote(fbl.FeedbackId))"></i>
                                     <span class="counter @(fbl.Upvotes > 0 ? "upvoted" : (fbl.Downvotes > 0 ? "downvoted" : ""))">
-                                        @(fbl.Upvotes > 0 ? "+" + fbl.Upvotes : "-" + fbl.Downvotes)
+                                        @(fbl.Upvotes > 0 ? (fbl.Upvotes == 0 ? fbl.Upvotes : "+" + fbl.Upvotes) : (fbl.Downvotes == 0 ? fbl.Downvotes : "-" + fbl.Downvotes))
                                     </span>
                                     <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote(fbl.FeedbackId))"></i>
                                 </div>
@@ -86,7 +86,7 @@
                             <div class="col-6">
                                 <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote(fbl.FeedbackId))"></i>
                                 <span class="counter @(fbl.Upvotes > 0 ? "upvoted" : (fbl.Downvotes > 0 ? "downvoted" : ""))">
-                                    @(fbl.Upvotes > 0 ? fbl.Upvotes : fbl.Downvotes)
+                                    @(fbl.Upvotes > 0 ? (fbl.Upvotes == 0 ? fbl.Upvotes : "+" + fbl.Upvotes) : (fbl.Downvotes == 0 ? fbl.Downvotes : "-" + fbl.Downvotes))
                                 </span>
                                 <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote(fbl.FeedbackId))"></i>
                             </div>
@@ -191,9 +191,9 @@
             feedback.Upvotes = upvoteCounter;
             feedback.Downvotes = downvoteCounter;
 
+            await js.InvokeVoidAsync("alert", $"Result: {JsonConvert.SerializeObject(feedback)}");
             await MyServices.UpdateById<Classes.Feedback>("feedbacks", myfbid, feedback);
             await js.InvokeVoidAsync("alert", $"You upvoted this feedback post (Id: {myfbid})!");
-            //await js.InvokeVoidAsync("alert", $"Result: {JsonConvert.SerializeObject(feedback)}");
         }
         else
         {
@@ -220,9 +220,9 @@
             feedback.Downvotes = downvoteCounter;
             feedback.Upvotes = upvoteCounter;
         
+            await js.InvokeVoidAsync("alert", $"Result: {JsonConvert.SerializeObject(feedback)}");
             await MyServices.UpdateById<Classes.Feedback>("feedbacks", myfbid, feedback);
             await js.InvokeVoidAsync("alert", $"You downvoted this feedback post (Id: {myfbid})!");
-            //await js.InvokeVoidAsync("alert", $"Result: {JsonConvert.SerializeObject(feedback)}");
         }
         else
         {
