@@ -61,15 +61,17 @@
                     {
                         if(Id == fbl.UsersId)
                         {
-                            <div class="feedbacklist d-block mt-3 col-12">
-                                <div class="col-6">
-                                    <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote(fbl.FeedbackId))"></i>
-                                    <span class="counter @(fbl.Upvotes > 0 ? "upvoted" : (fbl.Downvotes > 0 ? "downvoted" : ""))">
-                                        @(fbl.Upvotes > 0 ? (fbl.Upvotes == 0 ? fbl.Upvotes : "+" + fbl.Upvotes) : (fbl.Downvotes == 0 ? fbl.Downvotes : "-" + fbl.Downvotes))
-                                    </span>
-                                    <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote(fbl.FeedbackId))"></i>
+                            <div class="feedbacklist d-flex flex-row justify-content-around mt-3 col-12">
+                                <div class="col-6 col-md-2">
+                                    <div class="d-flex flex-column justify-content-center">
+                                        <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote(fbl.FeedbackId))"></i>
+                                        <span class="counter @(fbl.Counter > 0 ? "upvoted" : "downvoted")">
+                                            @(fbl.Counter > 0 ? (fbl.Counter == 0 ? "" : "+") + fbl.Counter : fbl.Counter)
+                                        </span>
+                                        <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote(fbl.FeedbackId))"></i>
+                                    </div>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-6 col-md-10">
                                     <h1 class="title">@fbl.Title</h1>
                                     <p class="barinfo mt-3">UserId: @fbl.UsersId | Date Start: @fbl.DateStart | Date End: @fbl.DateEnd</p>
                                     <p class="text text-justify mt-3">@fbl.Description</p>
@@ -82,15 +84,17 @@
                 {
                     @foreach (var fbl in feedbacklist)
                     {
-                        <div class="feedbacklist d-block mt-3 col-12">
-                            <div class="col-6">
-                                <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote(fbl.FeedbackId))"></i>
-                                <span class="counter @(fbl.Upvotes > 0 ? "upvoted" : (fbl.Downvotes > 0 ? "downvoted" : ""))">
-                                    @(fbl.Upvotes > 0 ? (fbl.Upvotes == 0 ? fbl.Upvotes : "+" + fbl.Upvotes) : (fbl.Downvotes == 0 ? fbl.Downvotes : "-" + fbl.Downvotes))
-                                </span>
-                                <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote(fbl.FeedbackId))"></i>
+                        <div class="feedbacklist d-flex flex-row justify-content-around mt-3 col-12">
+                            <div class="col-6 col-md-2">
+                                <div class="d-flex flex-column justify-content-center">
+                                    <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote(fbl.FeedbackId))"></i>
+                                    <span class="counter @(fbl.Counter > 0 ? "upvoted" : (fbl.Counter < 0 ? "downvoted" : ""))">
+                                        @(fbl.Counter > 0 ? (fbl.Counter == 0 ? "" : "+") + fbl.Counter : fbl.Counter)
+                                    </span>
+                                    <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote(fbl.FeedbackId))"></i>
+                                </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-6 col-md-10">
                                 <h1 class="title">@fbl.Title</h1>
                                 <p class="barinfo mt-3">UserId: @fbl.UsersId | Date Start: @fbl.DateStart | Date End: @fbl.DateEnd | Status: @fbl.Status</p>
                                 <p class="text text-justify mt-3">@fbl.Description</p>
@@ -120,14 +124,13 @@
 
 @code {
     [Inject] public IMyServices MyServices { get; set; }
-    [Parameter] public int? Id { get; set; }
+    [Parameter] public int? Id { get; set; } = 0;
 
     private Classes.UsersAuth mysession = new Classes.UsersAuth();
     public Classes.Feedback feedback = new Classes.Feedback();
     public List<Classes.Feedback> feedbacklist = new List<Classes.Feedback>();
 
-    private int upvoteCounter { get; set; } = 0;
-    private int downvoteCounter { get; set; } = 0;
+    public int? counter { get; set; } = 0;
     private bool isLoading { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -137,6 +140,16 @@
             isLoading = true;
             mysession = await localStorage.GetItemAsync<Classes.UsersAuth>("usersession");
             feedbacklist = (await MyServices.Get<Classes.Feedback>("feedbacks")).ToList();
+
+            if(Id > 0)
+            {
+                counter = (await getResFromList(Id)).Counter;
+            }
+            else
+            {
+                counter = (await getResFromList(feedbacklist[feedbacklist.Count() - 1].FeedbackId)).Counter;
+            }
+
             isLoading = false;
         }
         catch (Exception ex)
@@ -151,15 +164,7 @@
     {
         await MyServices.Create<Classes.Feedback>("feedbacks", feedback);
         await js.InvokeVoidAsync("alert", "Thank you for sending your feedback to me!");
-
-        if(Id > 0)
-        {
-            _navman.NavigateTo("/feedback/"+Id, true);
-        }
-        else
-        {
-            _navman.NavigateTo("/feedback", true);
-        }
+        _navman.NavigateTo("/feedback", true);
     }
 
     private async Task onInvalidSubmit()
@@ -177,23 +182,22 @@
         if (myfbid > 0)
         {
             var mylist = await getResFromList(myfbid);
+            feedback = new Classes.Feedback();
+
             feedback.FeedbackId = mylist.FeedbackId != null ? mylist.FeedbackId : myfbid;
             feedback.Title = mylist.Title;
             feedback.Description = mylist.Description;
             feedback.Status = mylist.Status;
             feedback.DateStart = mylist.DateStart;
             feedback.DateEnd = mylist.DateEnd;
-            feedback.AttachmentFile = mylist.AttachmentFile;
+            feedback.AttachmentFile = !string.IsNullOrEmpty(mylist.AttachmentFile) ? mylist.AttachmentFile : "";
             feedback.UsersId = mylist.UsersId;
 
-            upvoteCounter++;
-            downvoteCounter = 0;
-            feedback.Upvotes = upvoteCounter;
-            feedback.Downvotes = downvoteCounter;
+            counter++;
+            feedback.Counter = counter;
 
-            await js.InvokeVoidAsync("alert", $"Result: {JsonConvert.SerializeObject(feedback)}");
             await MyServices.UpdateById<Classes.Feedback>("feedbacks", myfbid, feedback);
-            await js.InvokeVoidAsync("alert", $"You upvoted this feedback post (Id: {myfbid})!");
+            _navman.NavigateTo("/feedback", true);
         }
         else
         {
@@ -206,23 +210,21 @@
         if(myfbid > 0)
         {
             var mylist = await getResFromList(myfbid);
+            feedback = new Classes.Feedback();
             feedback.FeedbackId = mylist.FeedbackId;
             feedback.Title = mylist.Title;
             feedback.Description = mylist.Description;
             feedback.Status = mylist.Status;
             feedback.DateStart = mylist.DateStart;
             feedback.DateEnd = mylist.DateEnd;
-            feedback.AttachmentFile = mylist.AttachmentFile;
+            feedback.AttachmentFile = !string.IsNullOrEmpty(mylist.AttachmentFile) ? mylist.AttachmentFile : "";
             feedback.UsersId = mylist.UsersId;
 
-            downvoteCounter++;
-            upvoteCounter = 0;
-            feedback.Downvotes = downvoteCounter;
-            feedback.Upvotes = upvoteCounter;
-        
-            await js.InvokeVoidAsync("alert", $"Result: {JsonConvert.SerializeObject(feedback)}");
+            counter--;
+            feedback.Counter = counter;
+
             await MyServices.UpdateById<Classes.Feedback>("feedbacks", myfbid, feedback);
-            await js.InvokeVoidAsync("alert", $"You downvoted this feedback post (Id: {myfbid})!");
+            _navman.NavigateTo("/feedback", true);
         }
         else
         {

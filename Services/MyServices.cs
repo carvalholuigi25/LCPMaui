@@ -5,10 +5,10 @@ namespace LCPMaui.Services
     public interface IMyServices
     {
         public Task<List<T>> Get<T>(string apiname);
-        public Task<T> GetById<T>(string apiname, int id);
+        public Task<T> GetById<T>(string apiname, int? id);
         public Task<T> Create<T>(string apiname, T item);
         public Task<T> UpdateById<T>(string apiname, int? id, T item);
-        public Task DeleteById<T>(string apiname, int id);
+        public Task DeleteById<T>(string apiname, int? id);
     }
 
     public class MyServices : IMyServices
@@ -26,7 +26,7 @@ namespace LCPMaui.Services
             return await httpClient.GetFromJsonAsync<List<T>>($"{apiUrl}/{apiname}");
         }
 
-        public async Task<T> GetById<T>(string apiname, int id)
+        public async Task<T> GetById<T>(string apiname, int? id)
         {
             return await httpClient.GetFromJsonAsync<T>($"{apiUrl}/{apiname}/{id}");
         }
@@ -39,11 +39,13 @@ namespace LCPMaui.Services
 
         public async Task<T> UpdateById<T>(string apiname, int? id, T item)
         {
-            var resp = await httpClient.PutAsJsonAsync<T>($"{apiUrl}/{apiname}/{id}", item);
-            return await resp.Content.ReadFromJsonAsync<T>();
+            await httpClient.PutAsJsonAsync<T>($"{apiUrl}/{apiname}/{id}", item);
+            return await GetById<T>(apiname, id);
+            //var resp = await httpClient.PutAsJsonAsync<T>($"{apiUrl}/{apiname}/{id}", item);
+            //return await resp.Content.ReadFromJsonAsync<T>();
         }
 
-        public async Task DeleteById<T>(string apiname, int id)
+        public async Task DeleteById<T>(string apiname, int? id)
         {
             await httpClient.DeleteAsync($"{apiUrl}/{apiname}/{id}");
         }

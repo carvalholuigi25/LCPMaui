@@ -24,11 +24,8 @@ namespace LCPMaui.Classes
         [DisplayName("AttachmentFile")]
         public string? AttachmentFile { get; set; }
 
-        [DisplayName("Upvotes")]
-        public int? Upvotes { get; set; } = 0;
-
-        [DisplayName("Downvotes")]
-        public int? Downvotes { get; set; } = 0;
+        [DisplayName("Counter")]
+        public int? Counter { get; set; } = 0;
 
         [DisplayName("Status")]
         public string? Status { get; set; } = StatusType.resolved.ToString();
