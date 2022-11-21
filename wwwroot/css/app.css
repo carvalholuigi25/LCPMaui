@@ -67,6 +67,36 @@ a, .btn-link {
     display: none;
 }
 
+.hidden, .hide {
+    display: none !important;
+}
+
+.shown, .show {
+    display: block !important;
+}
+
+.showin {
+    display: inherit !important;
+}
+
+.text-justify {
+    text-align: justify;
+    line-height: 2rem;
+}
+
+.counter {
+    color: black;
+    font-weight: bold;
+}
+
+.counter.upvoted, .upvoted {
+    color: green !important;
+}
+
+.counter.downvoted, .downvoted {
+    color: red !important;
+}
+
 @supports (-webkit-touch-callout: none) {
     .status-bar-safe-area {
         display: flex;
