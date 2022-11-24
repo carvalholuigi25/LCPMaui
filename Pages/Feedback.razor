@@ -117,8 +117,6 @@
             isLoading = true;
             mysession = await localStorage.GetItemAsync<Classes.UsersAuth>("usersession");
             feedbacklist = (await MyServices.Get<Classes.Feedback>("feedbacks")).ToList();
-            Id = await localStorage.GetItemAsync<int?>("MyIdFeedback") != null ? await localStorage.GetItemAsync<int?>("MyIdFeedback") : 1;
-            Counter = (await getResFromList(Id)).Counter;
             isLoading = false;
         }
         catch (Exception ex)
@@ -148,12 +146,14 @@
 
     private async Task onUpvote(int? myfbid = 1)
     {
+        Counter = (await getResFromList(myfbid)).Counter;
         Counter++;
         await SetFeedback(myfbid, Counter);
     }
 
     private async Task onDownvote(int? myfbid = 1)
     {
+        Counter = (await getResFromList(myfbid)).Counter;
         Counter--;
         await SetFeedback(myfbid, Counter);
     }
@@ -173,8 +173,6 @@
         feedback.UsersId = mylist.UsersId;
         feedback.Counter = CounterV;
 
-        await localStorage.SetItemAsync<int?>("MyIdFeedback", feedback.FeedbackId);
-        await localStorage.SetItemAsync<int?>("MyCounterFeedback", feedback.Counter);
         await MyServices.UpdateById<Classes.Feedback>("feedbacks", myfbidv, feedback);
         
         _navman.NavigateTo("/feedback", true);
