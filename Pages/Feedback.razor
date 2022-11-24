@@ -1,5 +1,4 @@
 ﻿@page "/feedback"
-@page "/feedback/{Id:int}"
 
 <PageTitle>LCP Maui - Feedback</PageTitle>
 
@@ -22,85 +21,63 @@
                     <InputTextArea id="description" class="description form-control text-justify" cols="1" rows="5" @bind-Value="feedback.Description" />
                 </div>
 
-                <div class="form-group mt-3 d-inline-block">
-                    @if (mysession != null)
-                    {
-                        <div class="senderblk d-inline-block">
-                            <label>Sending as</label>
-                        
-                            <input type="text" class="form-control" value="@mysession.Username" style="cursor: not-allowed; background: gray; color: white;" readonly />
-                            <InputNumber id="usersId" class="usersId hidden form-control" @bind-Value="mysession.UsersAuthId" />
-                        </div>
-                    }
+                <div class="d-block mt-3">
+                    <div class="form-group d-inline-block">
+                        @if (mysession != null)
+                        {
+                            <div class="senderblk d-inline-block">
+                                <label>Sending as</label>
 
-                    @if(!string.IsNullOrEmpty(feedback.Status))
-                    {
-                        <div class="statusblk d-inline-block @(mysession != null ? "ms-3" : "")">
-                            <label>Status</label>
-                            <InputSelect class="status form-control d-inline-block" id="status" @bind-Value="feedback.Status">
-                                @foreach (int status in Enum.GetValues(typeof(StatusType)))
-                                {
-                                    <option value="@Enum.GetName(typeof(StatusType), status)" data-id="@status">
-                                        @Enum.GetName(typeof(StatusType), status)
-                                    </option>
-                                }
-                            </InputSelect>
-                        </div>
-                    }
+                                <input type="text" class="form-control" value="@mysession.Username" style="cursor: not-allowed; background: gray; color: white;" readonly />
+                                <InputNumber id="usersId" class="usersId hidden form-control" @bind-Value="mysession.UsersAuthId" />
+                            </div>
+                        }
 
-                    <button type="button" class="btn btn-secondary btnclear" onclick="@(() => Clear())">Clear</button>
-                    <button type="submit" class="btn btn-primary btnsend">Send</button>
+                        @if (!string.IsNullOrEmpty(feedback.Status))
+                        {
+                            <div class="statusblk d-inline-block @(mysession != null ? "ms-3" : "")">
+                                <label>Status</label>
+                                <InputSelect class="status form-control d-inline-block" id="status" @bind-Value="feedback.Status">
+                                    @foreach (int status in Enum.GetValues(typeof(StatusType)))
+                                    {
+                                        <option value="@Enum.GetName(typeof(StatusType), status)" data-id="@status">
+                                            @Enum.GetName(typeof(StatusType), status)
+                                        </option>
+                                    }
+                                </InputSelect>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="d-block mt-3">
+                    <div class="form-group d-inline-block">
+                        <button type="button" class="btn btn-secondary btnclear" onclick="@(() => Clear())">Clear</button>
+                        <button type="submit" class="btn btn-primary btnsend">Send</button>
+                    </div>
                 </div>
             </EditForm>
 
             @if(feedbacklist != null)
             {
-                @if(Id > 0)
+                @foreach (var fbl in feedbacklist)
                 {
-                    @foreach (var fbl in feedbacklist)
-                    {
-                        if(Id == fbl.UsersId)
-                        {
-                            <div class="feedbacklist d-flex flex-row justify-content-around mt-3 col-12">
-                                <div class="col-6 col-md-2">
-                                    <div class="d-flex flex-column justify-content-center">
-                                        <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote(fbl.FeedbackId))"></i>
-                                        <span class="counter @(fbl.Counter > 0 ? "upvoted" : "downvoted")">
-                                            @(fbl.Counter > 0 ? (fbl.Counter == 0 ? "" : "+") + fbl.Counter : fbl.Counter)
-                                        </span>
-                                        <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote(fbl.FeedbackId))"></i>
-                                    </div>
-                                </div>
-                                <div class="col-6 col-md-10">
-                                    <h1 class="title">@fbl.Title</h1>
-                                    <p class="barinfo mt-3">UserId: @fbl.UsersId | Date Start: @fbl.DateStart | Date End: @fbl.DateEnd</p>
-                                    <p class="text text-justify mt-3">@fbl.Description</p>
-                                </div>
-                            </div>
-                        }
-                    }
-                } 
-                else
-                {
-                    @foreach (var fbl in feedbacklist)
-                    {
-                        <div class="feedbacklist d-flex flex-row justify-content-around mt-3 col-12">
-                            <div class="col-6 col-md-2">
-                                <div class="d-flex flex-column justify-content-center">
-                                    <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote(fbl.FeedbackId))"></i>
-                                    <span class="counter @(fbl.Counter > 0 ? "upvoted" : (fbl.Counter < 0 ? "downvoted" : ""))">
-                                        @(fbl.Counter > 0 ? (fbl.Counter == 0 ? "" : "+") + fbl.Counter : fbl.Counter)
-                                    </span>
-                                    <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote(fbl.FeedbackId))"></i>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-10">
-                                <h1 class="title">@fbl.Title</h1>
-                                <p class="barinfo mt-3">UserId: @fbl.UsersId | Date Start: @fbl.DateStart | Date End: @fbl.DateEnd | Status: @fbl.Status</p>
-                                <p class="text text-justify mt-3">@fbl.Description</p>
+                    <div class="feedbacklist d-flex flex-row justify-content-around mt-3 col-12">
+                        <div class="col-6 col-md-2">
+                            <div class="d-flex flex-column justify-content-center">
+                                <i class="bi bi-chevron-up" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onUpvote(fbl.FeedbackId))"></i>
+                                <span class="counter @(fbl.Counter > 0 ? "upvoted" : (fbl.Counter < 0 ? "downvoted" : ""))">
+                                    @(fbl.Counter > 0 ? (fbl.Counter == 0 ? "" : "+") + fbl.Counter : fbl.Counter)
+                                </span>
+                                <i class="bi bi-chevron-down" style="font-size: 2rem; cursor: pointer;" onclick="@(() => onDownvote(fbl.FeedbackId))"></i>
                             </div>
                         </div>
-                    }
+                        <div class="col-6 col-md-10">
+                            <h1 class="title">@fbl.Title</h1>
+                            <p class="barinfo mt-3">UserId: @fbl.UsersId | Date Start: @fbl.DateStart | Date End: @fbl.DateEnd | Status: @fbl.Status</p>
+                            <p class="text text-justify mt-3">@fbl.Description</p>
+                        </div>
+                    </div>
                 }
             }
             else
@@ -124,13 +101,13 @@
 
 @code {
     [Inject] public IMyServices MyServices { get; set; }
-    [Parameter] public int? Id { get; set; } = 0;
 
     private Classes.UsersAuth mysession = new Classes.UsersAuth();
     public Classes.Feedback feedback = new Classes.Feedback();
     public List<Classes.Feedback> feedbacklist = new List<Classes.Feedback>();
 
-    public int? counter { get; set; } = 0;
+    public int? Id { get; set; } = 1;
+    public int? Counter { get; set; } = 0;
     private bool isLoading { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -140,16 +117,8 @@
             isLoading = true;
             mysession = await localStorage.GetItemAsync<Classes.UsersAuth>("usersession");
             feedbacklist = (await MyServices.Get<Classes.Feedback>("feedbacks")).ToList();
-
-            if(Id > 0)
-            {
-                counter = (await getResFromList(Id)).Counter;
-            }
-            else
-            {
-                counter = (await getResFromList(feedbacklist[feedbacklist.Count() - 1].FeedbackId)).Counter;
-            }
-
+            Id = await localStorage.GetItemAsync<int?>("MyIdFeedback") != null ? await localStorage.GetItemAsync<int?>("MyIdFeedback") : 1;
+            Counter = (await getResFromList(Id)).Counter;
             isLoading = false;
         }
         catch (Exception ex)
@@ -179,57 +148,36 @@
 
     private async Task onUpvote(int? myfbid = 1)
     {
-        if (myfbid > 0)
-        {
-            var mylist = await getResFromList(myfbid);
-            feedback = new Classes.Feedback();
-
-            feedback.FeedbackId = mylist.FeedbackId != null ? mylist.FeedbackId : myfbid;
-            feedback.Title = mylist.Title;
-            feedback.Description = mylist.Description;
-            feedback.Status = mylist.Status;
-            feedback.DateStart = mylist.DateStart;
-            feedback.DateEnd = mylist.DateEnd;
-            feedback.AttachmentFile = !string.IsNullOrEmpty(mylist.AttachmentFile) ? mylist.AttachmentFile : "";
-            feedback.UsersId = mylist.UsersId;
-
-            counter++;
-            feedback.Counter = counter;
-
-            await MyServices.UpdateById<Classes.Feedback>("feedbacks", myfbid, feedback);
-            _navman.NavigateTo("/feedback", true);
-        }
-        else
-        {
-            await js.InvokeVoidAsync("alert", "Cannot upvote this feedback post because it doesnt exist!");
-        }
+        Counter++;
+        await SetFeedback(myfbid, Counter);
     }
 
     private async Task onDownvote(int? myfbid = 1)
     {
-        if(myfbid > 0)
-        {
-            var mylist = await getResFromList(myfbid);
-            feedback = new Classes.Feedback();
-            feedback.FeedbackId = mylist.FeedbackId;
-            feedback.Title = mylist.Title;
-            feedback.Description = mylist.Description;
-            feedback.Status = mylist.Status;
-            feedback.DateStart = mylist.DateStart;
-            feedback.DateEnd = mylist.DateEnd;
-            feedback.AttachmentFile = !string.IsNullOrEmpty(mylist.AttachmentFile) ? mylist.AttachmentFile : "";
-            feedback.UsersId = mylist.UsersId;
+        Counter--;
+        await SetFeedback(myfbid, Counter);
+    }
 
-            counter--;
-            feedback.Counter = counter;
+    private async Task SetFeedback(int? myfbidv = 1, int? CounterV = 0)
+    {
+        var mylist = await getResFromList(myfbidv);
+        feedback = new Classes.Feedback();
 
-            await MyServices.UpdateById<Classes.Feedback>("feedbacks", myfbid, feedback);
-            _navman.NavigateTo("/feedback", true);
-        }
-        else
-        {
-            await js.InvokeVoidAsync("alert", "Cannot downvote this feedback post because it doesnt exist!");
-        }
+        feedback.FeedbackId = mylist.FeedbackId != null ? mylist.FeedbackId : myfbidv;
+        feedback.AttachmentFile = !string.IsNullOrEmpty(mylist.AttachmentFile) ? mylist.AttachmentFile : "";
+        feedback.Title = mylist.Title;
+        feedback.Description = mylist.Description;
+        feedback.Status = mylist.Status;
+        feedback.DateStart = mylist.DateStart;
+        feedback.DateEnd = mylist.DateEnd;
+        feedback.UsersId = mylist.UsersId;
+        feedback.Counter = CounterV;
+
+        await localStorage.SetItemAsync<int?>("MyIdFeedback", feedback.FeedbackId);
+        await localStorage.SetItemAsync<int?>("MyCounterFeedback", feedback.Counter);
+        await MyServices.UpdateById<Classes.Feedback>("feedbacks", myfbidv, feedback);
+        
+        _navman.NavigateTo("/feedback", true);
     }
 
     private async Task Clear()
