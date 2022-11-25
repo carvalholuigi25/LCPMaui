@@ -25,6 +25,44 @@
             <input type="submit" class="btn btn-primary btnsubmit" value="Enter" />
         </div>
     </EditForm>
+    <hr />
+    <div class="qsignup" id="qsignup">
+        <h3 class="title">Quick sign up / login</h3>
+        <p class="msg">
+            Don't wanna create new account manually?
+            Fine. There's a quick sign up and login to access instantly to my app.
+        </p>
+        <p class="msg">
+            <b>Warning:</b> 
+            This feature is currently work in progress, please wait it until to this feature to be developed or use login / signup manually!
+        </p>
+        <div class="blkbtnsocials" id="blkbtnsocials">
+            <button class="btn btn-primary btnsignsocials btnloggoogle" id="btnloggoogle" onclick="@(() => doQuickLogin("google"))">
+                <i class="bi bi-google"></i>
+                Google
+            </button>
+            <button class="btn btn-primary btnsignsocials btnloggithub" id="btnloggithub" onclick="@(() => doQuickLogin("github"))">
+                <i class="bi bi-github"></i>
+                Github
+            </button>
+            <button class="btn btn-primary btnsignsocials btnloglinkedin" id="btnloglinkedin" onclick="@(() => doQuickLogin("linkedin"))">
+                <i class="bi bi-linkedin"></i>
+                Linkedin
+            </button>
+            <button class="btn btn-primary btnsignsocials btnlogtwitch" id="btnlogtwitch" onclick="@(() => doQuickLogin("twitch"))">
+                <i class="bi bi-twitch"></i>
+                Twitch
+            </button>
+            <button class="btn btn-primary btnsignsocials btnlogfacebook" id="btnlogfacebook" onclick="@(() => doQuickLogin("facebook"))">
+                <i class="bi bi-facebook"></i>
+                Facebook
+            </button>
+            <button class="btn btn-primary btnsignsocials btnlogtwitter" id="btnlogtwitter" onclick="@(() => doQuickLogin("twitter"))">
+                <i class="bi bi-twitter"></i>
+                Twitter
+            </button>
+        </div>
+    </div>
 }
 else
 {
@@ -70,5 +108,35 @@ else
     private async Task onInvalidSubmit()
     {
         await js.InvokeVoidAsync("alert", "Invalid data!");
+    }
+
+    private async Task doQuickLogin(string authService = "google")
+    {
+        await js.InvokeVoidAsync("alert", "WARNING: This feature is currently work in progress, please wait it until to this feature to be developed or use login / signup manually!");
+
+        switch (authService.ToLower())
+        {
+            case "google":
+                await js.InvokeVoidAsync("alert", "Google");
+                break;
+            case "github":
+                await js.InvokeVoidAsync("alert", "Github");
+                break;
+            case "linkedin":
+                await js.InvokeVoidAsync("alert", "Linkedin");
+                break;
+            case "twitch":
+                await js.InvokeVoidAsync("alert", "Twitch");
+                break;
+            case "facebook":
+                await js.InvokeVoidAsync("alert", "Facebook (Meta)");
+                break;
+            case "twitter":
+                await js.InvokeVoidAsync("alert", "Twitter");
+                break;
+            default:
+                await js.InvokeVoidAsync("alert", "Not supported this auth service!");
+                break;
+        }
     }
 }

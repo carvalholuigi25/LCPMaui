@@ -97,6 +97,109 @@ a, .btn-link {
     color: red !important;
 }
 
+.qsignup, #qsignup {
+    display: block;
+    position: relative;
+    padding: 15px;
+    margin: 15px auto;
+    text-align: center;
+}
+
+.qsignup .title {
+    display: block;
+    text-align: center;
+    margin: 15px auto;
+}
+
+.qsignup .msg {
+    display: block;
+    text-align: center;
+    line-height: 2rem;
+    margin: 15px auto;
+}
+
+.qsignup .blkbtnsocials {
+    display: block;
+    margin: 15px auto;
+    text-align: center;
+}
+
+.qsignup .blkbtnsocials .btnsignsocials {
+    display: inline-block;
+    border: 0;
+    border: 1px solid;
+    border-radius: 25px;
+    text-align: center;
+    margin: 15px 5px;
+    padding: 5px 15px;
+}
+
+.btnsignsocials:hover {
+    background: black !important;
+    border-color: inherit !important;
+    color: white !important;
+}
+
+.btnloggoogle {
+    background: white !important;
+    border-color: inherit !important;
+    color: black !important;
+}
+
+.btnloggithub {
+    background: white !important;
+    border-color: inherit !important;
+    color: black !important;
+}
+
+.btnloglinkedin {
+    background: white !important;
+    border-color: inherit !important;
+    color: black !important;
+}
+
+.btnlogtwitch {
+    background: white !important;
+    border-color: inherit !important;
+    color: black !important;
+}
+
+.btnlogfacebook {
+    background: white !important;
+    border-color: inherit !important;
+    color: black !important;
+}
+
+.btnlogtwitter {
+    background: white !important;
+    border-color: inherit !important;
+    color: black !important;
+}
+
+.bi-google {
+    color: inherit !important;
+}
+
+.bi-github {
+    color: inherit !important;
+}
+
+.bi-linkedin {
+    color: inherit !important;
+}
+
+.bi-twitch {
+    color: inherit !important;
+}
+
+.bi-facebook {
+    color: inherit !important;
+}
+
+.bi-twitter {
+    color: inherit !important;
+}
+
 @supports (-webkit-touch-callout: none) {
     .status-bar-safe-area {
         display: flex;
