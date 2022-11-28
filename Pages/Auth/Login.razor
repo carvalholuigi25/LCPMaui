@@ -118,21 +118,27 @@ else
         {
             case "google":
                 await js.InvokeVoidAsync("alert", "Google");
+                _navman.NavigateTo("https://localhost:7285/Identity/Account/Login", true);
                 break;
             case "github":
                 await js.InvokeVoidAsync("alert", "Github");
-                break;
-            case "linkedin":
-                await js.InvokeVoidAsync("alert", "Linkedin");
-                break;
-            case "twitch":
-                await js.InvokeVoidAsync("alert", "Twitch");
+                _navman.NavigateTo("https://localhost:7285/Identity/Account/Login", true);
                 break;
             case "facebook":
                 await js.InvokeVoidAsync("alert", "Facebook (Meta)");
+                _navman.NavigateTo("https://localhost:7285/Identity/Account/Login", true);
                 break;
             case "twitter":
                 await js.InvokeVoidAsync("alert", "Twitter");
+                _navman.NavigateTo("https://localhost:7285/Identity/Account/Login", true);
+                break;
+            case "linkedin":
+                await js.InvokeVoidAsync("alert", "Linkedin");
+                _navman.NavigateTo("https://localhost:7285/Identity/Account/Login", true);
+                break;
+            case "twitch":
+                await js.InvokeVoidAsync("alert", "Twitch");
+                _navman.NavigateTo("https://localhost:7285/Identity/Account/Login", true);
                 break;
             default:
                 await js.InvokeVoidAsync("alert", "Not supported this auth service!");
