@@ -65,4 +65,13 @@
       <Folder Include="Data\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Update="wwwroot\css\bootstrap\bootstrap.bundle.min.js">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="wwwroot\css\bootstrap\bootstrap.min.css">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
 </Project>
