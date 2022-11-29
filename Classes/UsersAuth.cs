@@ -10,8 +10,8 @@ namespace LCPMaui.Classes
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        [DisplayName("UsersAuthId")]
-        public int? UsersAuthId { get; set; }
+        [DisplayName("MyUsersAuthId")]
+        public int? MyUsersAuthId { get; set; }
 
         [DisplayName("Username")]
         public string? Username { get; set; }

@@ -14,7 +14,7 @@ namespace LCPMaui.Services
     public class MyServices : IMyServices
     {
         private readonly HttpClient httpClient;
-        private readonly string apiUrl = "https://localhost:5002/api";
+        private readonly string apiUrl = "https://localhost:7285/api";
 
         public MyServices(HttpClient httpClient)
         {

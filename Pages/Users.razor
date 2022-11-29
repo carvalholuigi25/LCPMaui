@@ -15,7 +15,7 @@
                 {
                     @foreach (var user in users)
                     {
-                        @if(Id == user.UsersId)
+                        @if(Id == user.MyUsersId)
                         {
                             <div class="col-12">
                                 <div class="card">
@@ -36,7 +36,7 @@
                     {
                         <div class="col-12 col-md-6 col-lg-4">
                             <div class="card">
-                                <a href="users/@user.UsersId">
+                                <a href="#" onclick="@(() => OnRedirectUserProf(user.MyUsersId))">
                                     <img src="images/@user.Image" alt="@user.Username" title="@user.Username" loading="lazy" class="card-img-top img-fluid img-post" />
                                     <div class="card-body">
                                         <p class="card-title">@user.Username</p>
@@ -102,5 +102,10 @@
             await js.InvokeVoidAsync("console.log", "" + ex.Message);
             isLoading = false;
         }
+    }
+
+    private void OnRedirectUserProf(int? userId = 1)
+    {
+        _navman.NavigateTo("users/" + userId, true);
     }
 }

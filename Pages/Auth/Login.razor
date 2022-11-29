@@ -95,7 +95,7 @@ else
 
     private async Task onValidSubmit()
     {
-        usersath.UsersAuthId = (await getList()).UsersId;
+        usersath.MyUsersAuthId = (await getList()).MyUsersId;
         usersath.Role = string.IsNullOrEmpty(usersath.Role) ? (await getList()).Role : usersath.Role;
         usersath.Email = string.IsNullOrEmpty(usersath.Email) ? (await getList()).Email : usersath.Email;
         usersath.Pin = string.IsNullOrEmpty(usersath.Pin) ? (await getList()).Pin : usersath.Pin;
